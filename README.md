@@ -44,7 +44,7 @@ Choose the database that best fits your project's requirements and harness the p
 
 ## Install
 ```bash
-pip3 install DbUnify
+pip3 install DbUnify==1.0.1
 ```
 
 ## Class: DatabaseManager
