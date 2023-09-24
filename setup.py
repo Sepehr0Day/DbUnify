@@ -12,7 +12,6 @@ setup(
     long_description_content_type='text/markdown',
     packages=['DbUnify'],
     install_requires=[
-        'sqlite3',
         'pymysql',
         'psycopg2',
         'pymongo',
