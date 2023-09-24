@@ -24,6 +24,12 @@ Don't miss out on the opportunity to simplify your database connectivity. Try Db
 
 ##
 
+**Note!**
+
+The project is in early versions and some codes may contain bugs. If you encounter a bug, please don't hesitate to send a message to my ID via [Telegram](https://t.me/sepehr0day).
+
+#
+
 # Supported Databases
 
 DbUnify (Database Management DbUnify) library provides seamless connectivity to various popular databases. You can use DbUnify to interact with the following databases:
@@ -44,7 +50,7 @@ Choose the database that best fits your project's requirements and harness the p
 
 ## Install
 ```bash
-pip3 install DbUnify==1.0.1
+pip3 install DbUnify
 ```
 
 ## Class: DatabaseManager
@@ -269,125 +275,259 @@ Closes the database connection.
 ## SQLite
 
 ```python
-# Example for SQLite
-sqlite_db = DatabaseManager('sqlite', 'my_database.db')
+# Initialize a SQLite database connection
+db = DatabaseManager(db_type='sqlite', db_name='my_database.db')
 
-# Creating a table
-sqlite_db.create_table('students', [('id', 'INTEGER PRIMARY KEY'), ('name', 'TEXT'), ('age', 'INTEGER')])
+# Create a table
+table_name = 'my_table'
+columns = [('id', 'INTEGER PRIMARY KEY'), ('name', 'TEXT'), ('age', 'INTEGER')]
+db.create_table(table_name, columns)
 
-# Inserting a row
-sqlite_db.insert_row('students', {'name': 'Alice', 'age': 25})
+# Insert rows into the table
+data = [
+    {'name': 'Alice', 'age': 30},
+    {'name': 'Bob', 'age': 25},
+    {'name': 'Charlie', 'age': 35}
+]
 
-# Updating a row
-sqlite_db.update_row('students', {'name': 'Alicia', 'age': 26}, 'name = ?', 'Alice')
+for row in data:
+    db.insert_row(table_name, row)
 
-# Deleting a row
-sqlite_db.delete_row('students', 'name = ?', 'Alicia')
+# Fetch and print all rows from the table
+rows = db.search_all(table_name)
+print("All rows in the table:")
+for row in rows:
+    print(row)
 
-# Searching for one row
-result = sqlite_db.search_one('students', 'name = ?', 'Alice')
+# Update a row
+update_data = {'age': 32}
+update_condition = "name = 'Alice'"
+db.update_row(table_name, update_data, update_condition)
 
-# Searching for all rows
-all_students = sqlite_db.search_all('students')
+# Fetch and print the updated row
+updated_row = db.search_one(table_name, update_condition)
+print("Updated row:")
+print(updated_row)
+
+# Delete a row
+delete_condition = "name = 'Bob'"
+db.delete_row(table_name, delete_condition)
+
+# Fetch and print all rows after deletion
+rows_after_deletion = db.search_all(table_name)
+print("All rows after deletion:")
+for row in rows_after_deletion:
+    print(row)
+
+# Backup and restore the database
+backup_path = 'my_database_backup.db'
+db.backup_database(backup_path)
+db.drop_table(table_name)  # Drop the table to demonstrate restoration
+db.restore_database(backup_path)
+
+# Close the database connection
+db.close()
 ```
 
 # MySQL
 ```python
-# Example for MySQL
-mysql_db = DatabaseManager('mysql', 'my_mysql_db', user='username', password='password', host='localhost')
+# Initialize a MySQL database connection
+db = DatabaseManager(db_type='mysql', db_name='my_database', user='your_username', password='your_password', host='localhost')
 
-# Creating a table
-mysql_db.create_table('employees', [('id', 'INT AUTO_INCREMENT PRIMARY KEY'), ('name', 'VARCHAR(255)'), ('salary', 'DECIMAL(10, 2)')])
+# Create a table
+table_name = 'my_table'
+columns = [('id', 'INT AUTO_INCREMENT PRIMARY KEY'), ('name', 'VARCHAR(255)'), ('age', 'INT')]
+db.create_table(table_name, columns)
 
-# Inserting a row
-mysql_db.insert_row('employees', {'name': 'John', 'salary': 50000.0})
+# Insert rows into the table
+data = [
+    {'name': 'Alice', 'age': 30},
+    {'name': 'Bob', 'age': 25},
+    {'name': 'Charlie', 'age': 35}
+]
 
-# Updating a row
-mysql_db.update_row('employees', {'salary': 55000.0}, 'name = ?', 'John')
+for row in data:
+    db.insert_row(table_name, row)
 
-# Deleting a row
-mysql_db.delete_row('employees', 'name = ?', 'John')
+# Fetch and print all rows from the table
+rows = db.search_all(table_name)
+print("All rows in the table:")
+for row in rows:
+    print(row)
 
-# Searching for one row
-result = mysql_db.search_one('employees', 'name = ?', 'John')
+# Update a row
+update_data = {'age': 32}
+update_condition = "name = 'Alice'"
+db.update_row(table_name, update_data, update_condition)
 
-# Searching for all rows
-all_employees = mysql_db.search_all('employees')
+# Fetch and print the updated row
+updated_row = db.search_one(table_name, update_condition)
+print("Updated row:")
+print(updated_row)
+
+# Delete a row
+delete_condition = "name = 'Bob'"
+db.delete_row(table_name, delete_condition)
+
+# Fetch and print all rows after deletion
+rows_after_deletion = db.search_all(table_name)
+print("All rows after deletion:")
+for row in rows_after_deletion:
+    print(row)
+
+# Close the database connection
+db.close()
 ```
 # PostgreSQL
 ```python
-# Example for PostgreSQL
-postgresql_db = DatabaseManager('postgresql', 'my_postgresql_db', user='username', password='password', host='localhost')
+# Initialize a PostgreSQL database connection
+db = DatabaseManager(db_type='postgresql', db_name='my_database', user='your_username', password='your_password', host='localhost', port='5432')
 
-# Creating a table
-postgresql_db.create_table('products', [('id', 'SERIAL PRIMARY KEY'), ('name', 'TEXT'), ('price', 'DECIMAL(10, 2)')])
+# Create a table
+table_name = 'my_table'
+columns = [('id', 'SERIAL PRIMARY KEY'), ('name', 'VARCHAR(255)'), ('age', 'INT')]
+db.create_table(table_name, columns)
 
-# Inserting a row
-postgresql_db.insert_row('products', {'name': 'Laptop', 'price': 1000.0})
+# Insert rows into the table
+data = [
+    {'name': 'Alice', 'age': 30},
+    {'name': 'Bob', 'age': 25},
+    {'name': 'Charlie', 'age': 35}
+]
 
-# Updating a row
-postgresql_db.update_row('products', {'price': 1100.0}, 'name = ?', 'Laptop')
+for row in data:
+    db.insert_row(table_name, row)
 
-# Deleting a row
-postgresql_db.delete_row('products', 'name = ?', 'Laptop')
+# Fetch and print all rows from the table
+rows = db.search_all(table_name)
+print("All rows in the table:")
+for row in rows:
+    print(row)
 
-# Searching for one row
-result = postgresql_db.search_one('products', 'name = ?', 'Laptop')
+# Update a row
+update_data = {'age': 32}
+update_condition = "name = 'Alice'"
+db.update_row(table_name, update_data, update_condition)
 
-# Searching for all rows
-all_products = postgresql_db.search_all('products')
+# Fetch and print the updated row
+updated_row = db.search_one(table_name, update_condition)
+print("Updated row:")
+print(updated_row)
+
+# Delete a row
+delete_condition = "name = 'Bob'"
+db.delete_row(table_name, delete_condition)
+
+# Fetch and print all rows after deletion
+rows_after_deletion = db.search_all(table_name)
+print("All rows after deletion:")
+for row in rows_after_deletion:
+    print(row)
+
+# Close the database connection
+db.close()
 ```
 
 # MongoDB
 ```python
-# Example for MongoDB
-mongodb_db = DatabaseManager('mongodb', 'my_mongodb_db', host='localhost', port=27017)
+# Initialize a MongoDB connection
+db = DatabaseManager(db_type='mongodb', host='localhost', port=27017)
 
-# Creating a collection (equivalent to a table in MongoDB)
-products_collection = mongodb_db.connection.my_mongodb_db.products
+# Create a collection
+collection_name = 'my_collection'
+collection = db.connection['my_database'][collection_name]
 
-# Inserting a record (equivalent to a row in MongoDB)
-products_collection.insert_one({'name': 'Phone', 'price': 500.0})
+# Insert documents into the collection
+data = [
+    {'name': 'Alice', 'age': 30},
+    {'name': 'Bob', 'age': 25},
+    {'name': 'Charlie', 'age': 35}
+]
 
-# Updating a record
-products_collection.update_one({'name': 'Phone'}, {'$set': {'price': 550.0}})
+collection.insert_many(data)
 
-# Deleting a record
-products_collection.delete_one({'name': 'Phone'})
+# Fetch and print all documents from the collection
+documents = collection.find()
+print("All documents in the collection:")
+for doc in documents:
+    print(doc)
 
-# Searching for one record
-result = products_collection.find_one({'name': 'Phone'})
+# Update a document
+update_data = {'$set': {'age': 32}}
+update_condition = {'name': 'Alice'}
+collection.update_one(update_condition, update_data)
 
-# Searching for all records
-all_products = list(products_collection.find())
+# Fetch and print the updated document
+updated_doc = collection.find_one(update_condition)
+print("Updated document:")
+print(updated_doc)
+
+# Delete a document
+delete_condition = {'name': 'Bob'}
+collection.delete_one(delete_condition)
+
+# Fetch and print all documents after deletion
+documents_after_deletion = collection.find()
+print("All documents after deletion:")
+for doc in documents_after_deletion:
+    print(doc)
+
+# Close the database connection
+db.connection.close()
 ```
 
 # SQL Server
 ```python
-# Example for SQL Server
-sqlserver_db = DatabaseManager('sqlserver', 'my_sqlserver_db', driver='{SQL Server}', server='localhost', database='my_db', uid='username', pwd='password')
+# Initialize a SQL Server database connection
+db = DatabaseManager(db_type='sqlserver', server='localhost', database='my_database', user='your_username', password='your_password')
 
-# Creating a table
-sqlserver_db.create_table('orders', [('id', 'INT IDENTITY(1,1) PRIMARY KEY'), ('customer_name', 'VARCHAR(255)'), ('total_amount', 'DECIMAL(10, 2)')])
+# Create a table
+table_name = 'my_table'
+columns = [('id', 'INT IDENTITY(1,1) PRIMARY KEY'), ('name', 'NVARCHAR(255)'), ('age', 'INT')]
+db.create_table(table_name, columns)
 
-# Inserting a record
-sqlserver_db.insert_row('orders', {'customer_name': 'Jane', 'total_amount': 200.0})
+# Insert rows into the table
+data = [
+    {'name': 'Alice', 'age': 30},
+    {'name': 'Bob', 'age': 25},
+    {'name': 'Charlie', 'age': 35}
+]
 
-# Updating a record
-sqlserver_db.update_row('orders', {'total_amount': 250.0}, 'customer_name = ?', 'Jane')
+for row in data:
+    db.insert_row(table_name, row)
 
-# Deleting a record
-sqlserver_db.delete_row('orders', 'customer_name = ?', 'Jane')
+# Fetch and print all rows from the table
+rows = db.search_all(table_name)
+print("All rows in the table:")
+for row in rows:
+    print(row)
 
-# Searching for one record
-result = sqlserver_db.search_one('orders', 'customer_name = ?', 'Jane')
+# Update a row
+update_data = {'age': 32}
+update_condition = "name = 'Alice'"
+db.update_row(table_name, update_data, update_condition)
 
-# Searching for all records
-all_orders = sqlserver_db.search_all('orders')
+# Fetch and print the updated row
+updated_row = db.search_one(table_name, update_condition)
+print("Updated row:")
+print(updated_row)
+
+# Delete a row
+delete_condition = "name = 'Bob'"
+db.delete_row(table_name, delete_condition)
+
+# Fetch and print all rows after deletion
+rows_after_deletion = db.search_all(table_name)
+print("All rows after deletion:")
+for row in rows_after_deletion:
+    print(row)
+
+# Close the database connection
+db.close()
 ```
 ---
 *Your Database Management DbUnify, made easy with DbUnify.*<br>
-<a href="https://pypi.org/project/DbUnify/"><img src="https://img.shields.io/badge/DbUnify-1.0.0-blue"></a> 
+<a href="https://pypi.org/project/DbUnify/"><img src="https://img.shields.io/badge/DbUnify-1.0.2-blue"></a> 
 
 **By Sepehr0Day**
 
